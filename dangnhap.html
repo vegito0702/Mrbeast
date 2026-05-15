@@ -132,9 +132,9 @@
 
 <!-- MINI NAVBAR -->
 <nav class="navbar" style="position:static">
-  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <a href="index.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
   <div style="font-size:13px;color:#9e9e9e">Đăng nhập / Đăng ký</div>
-  <a href="baitap.html" style="font-size:13px;font-weight:600;color:#0a0a0a;display:flex;align-items:center;gap:6px">
+  <a href="index.html" style="font-size:13px;font-weight:600;color:#0a0a0a;display:flex;align-items:center;gap:6px">
     ← Về trang chủ
   </a>
 </nav>
@@ -260,7 +260,7 @@
       <div class="s-icon">🎉</div>
       <h3 id="success-title">Đăng nhập thành công!</h3>
       <p id="success-desc">Chào mừng bạn quay lại Mr.Beast Gohan. Đang chuyển hướng...</p>
-      <a href="baitap.html" class="btn-auth" style="display:inline-block;text-decoration:none;text-align:center;max-width:220px">
+      <a href="index.html" class="btn-auth" style="display:inline-block;text-decoration:none;text-align:center;max-width:220px">
         Về trang chủ →
       </a>
     </div>
@@ -425,7 +425,7 @@ function verifyOtp() {
       document.getElementById('success-title').textContent = 'Đăng nhập thành công!';
       document.getElementById('success-desc').textContent = 'Chào mừng trở lại! Đang chuyển hướng về trang chủ...';
     }
-    setTimeout(function() { window.location.href = 'baitap.html'; }, 2500);
+    setTimeout(function() { window.location.href = 'index.html'; }, 2500);
   } else {
     document.querySelectorAll('.otp-input').forEach(function(inp) {
       inp.style.borderColor = 'var(--accent)';
