@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lab Thực Hành – Mr.Beast Gohan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+
+    
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <div class="nav-links">
+    <a href="baitap.html">Trang chủ</a>
+    <a href="gioithieu.html">Giới thiệu</a>
+    <div class="nav-dropdown">
+      <a class="dropdown-toggle">Sản phẩm <span class="dropdown-arrow">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="baitap.html#figure"><span class="dm-icon f">🎭</span><span class="dm-text"><strong>Figure</strong><small>Mô hình chính hãng</small></span></a>
+        <a href="baitap.html#tcg"><span class="dm-icon t">🃏</span><span class="dm-text"><strong>Trading Card Game</strong><small>Card bài anime</small></span></a>
+        <a href="baitap.html#beast-gohan"><span class="dm-icon b">🐉</span><span class="dm-text"><strong>Beast Gohan</strong><small>Hàng đặc biệt</small></span></a>
+      </div>
+    </div>
+    <a href="lienhe.html">Liên hệ</a>
+    <a href="labthuchanh.html" class="active">Lab Thực Hành</a>
+  </div>
+  <div class="nav-actions">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <a href="dangnhap.html" style="padding:10px 20px;border:1.5px solid #e0e0e0;border-radius:50px;font-size:13px;font-weight:600;color:#0a0a0a">Đăng nhập</a>
+    <a href="giohang.html" class="btn-nav-cart" style="text-decoration:none;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Giỏ hàng <span class="cart-badge" id="cart-count">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="lab-hero">
+  <h1>Lab thực hành</h1>
+  <p>Nội dung các bài thực hành môn Nhập môn Lập trình Web – Nhấn vào file để xem bài làm.</p>
+</div>
+
+<!-- LAB GRID -->
+<div class="lab-wrap">
+  <div class="lab-grid">
+
+    <!-- LAB 01 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 01</div>
+        <div class="lab-title">HTML cơ bản</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab01/Vi_du/lab1_bai3.html" target="_blank">Lab1_3</a>
+        <a class="lab-file-link" href="Lab/Lab01/Vi_du/lab1_bai4.html" target="_blank">Lab1_4</a>
+      </div>
+    </div>
+
+    <!-- LAB 02 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 02</div>
+        <div class="lab-title">Table &amp; List</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab02/lab02_khung_table.html" target="_blank">Lab2_1</a>
+        <a class="lab-file-link" href="Lab/Lab02/lab02_bai2.html" target="_blank">Lab2_2</a>
+        <a class="lab-file-link" href="Lab/Lab02/lab02_bai3.html" target="_blank">Lab2_3</a>
+      </div>
+    </div>
+
+    <!-- LAB 03 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 03</div>
+        <div class="lab-title">Frame &amp; Form</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab03/Lab03/Vi_du_Lab01/lab03_bai1.html" target="_blank">Lab3_1</a>
+        <a class="lab-file-link" href="Lab/Lab03/Lab03/Vi_du_Lab01/lab03_bai2.html" target="_blank">Lab3_2</a>
+      </div>
+    </div>
+
+    <!-- LAB 04 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 04</div>
+        <div class="lab-title">CSS cơ bản</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab04/Lab04/Vi_du/lab04_bai1.html" target="_blank">Lab4_1<a>
+        <a class="lab-file-link" href="Lab/Lab04/Lab04/Vi_du/lab04_bai2.html" target="_blank">Lab4_2</a>
+        <a class="lab-file-link" href="Lab/Lab04/Lab04/Vi_du/lab04_bai3.html" target="_blank">Lab4_3</a>
+      </div>
+    </div>
+
+    <!-- LAB 05 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 05</div>
+        <div class="lab-title">Các thuộc tính CSS</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab05/Lab05/Bai_2/lab05_menu.html" target="_blank">Lab5_1</a>
+        <a class="lab-file-link" href="Lab/Lab05/Lab05/Vi_du/index.html" target="_blank">Lab5_2</a>
+        <a class="lab-file-link" href="Lab/Lab05/Lab05/Bai_2/lab05_bai3.html" target="_blank">Lab5_3</a>
+      </div>
+    </div>
+
+    <!-- LAB 06 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 06</div>
+        <div class="lab-title">Xây dựng layout responsive bằng CSS</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab06/Lab06/lab06_menu_responsive.html" target="_blank">Lab6_1</a>
+        <a class="lab-file-link" href="Lab/Lab06/Lab06/Bai_2_Minh_hoa_layout/index.html" target="_blank">Lab6_2</a>
+      </div>
+    </div>
+
+    <!-- LAB 07 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 07</div>
+        <div class="lab-title">Javascript</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab07/Vi_du/index.html" target="_blank">Lab7_1</a>
+        <a class="lab-file-link" href="Lab/Lab07/demo_bai_2/index.html" target="_blank">Lab7_2</a>
+      </div>
+    </div>
+
+    <!-- LAB 08 -->
+    <div class="lab-card">
+      <div class="lab-card-head">
+        <div class="lab-num">Lab 08</div>
+        <div class="lab-title">Javascript nâng cao</div>
+      </div>
+      <div class="lab-files">
+        <a class="lab-file-link" href="Lab/Lab08/lab08_slider.html" target="_blank">Lab8_1</a>
+        <a class="lab-file-link" href="Lab/Lab08/lab08_slider_auto.html" target="_blank">Lab8_2</a>
+        <a class="lab-file-link" href="Lab/Lab08/lab08_json.html" target="_blank">Lab8_3</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER minimal -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Mr.Beast Gohan – Lab thực hành Nhập môn Web</span>
+    <div class="footer-legal"><a href="baitap.html">Trang chủ</a><a href="dashboard.html">Admin</a></div>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script src="js/dropdown.js"></script>
+</body>
+</html>

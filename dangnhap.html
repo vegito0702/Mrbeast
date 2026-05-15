@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Đăng nhập – Mr.Beast Gohan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #f5f5f5; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── AUTH WRAPPER ── */
+    .auth-page {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 48px 20px;
+    }
+    .auth-box {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 16px 60px rgba(0,0,0,.10);
+      width: 100%; max-width: 440px; overflow: hidden;
+    }
+    .auth-header {
+      background: #0a0a0a; padding: 32px 36px; text-align: center;
+    }
+    .auth-header .logo { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+    .auth-header .logo span { color: var(--accent); }
+    .auth-header p { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 6px; }
+
+    /* ── TABS ── */
+    .auth-tabs { display: flex; border-bottom: 1px solid #f0f0f0; }
+    .auth-tab {
+      flex: 1; padding: 16px; text-align: center; font-size: 14px;
+      font-weight: 600; cursor: pointer; color: #9e9e9e;
+      border-bottom: 2px solid transparent; transition: all .2s;
+    }
+    .auth-tab.active { color: #0a0a0a; border-bottom-color: var(--accent); }
+
+    /* ── PANELS ── */
+    .auth-panel { display: none; padding: 32px 36px; }
+    .auth-panel.active { display: block; }
+
+    /* ── FORM ── */
+    .f-group { margin-bottom: 16px; }
+    .f-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #0a0a0a; }
+    .f-group input {
+      width: 100%; padding: 13px 16px; border: 1.5px solid #e8e8e8;
+      border-radius: 10px; font-size: 14px; font-family: 'Inter',sans-serif;
+      outline: none; transition: border-color .2s;
+    }
+    .f-group input:focus { border-color: #0a0a0a; }
+    .f-group input.err { border-color: var(--accent); }
+    .f-err { font-size: 12px; color: var(--accent); margin-top: 4px; display: none; }
+    .f-group.show-err .f-err { display: block; }
+    .f-group.show-err input { border-color: var(--accent); }
+
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 44px; }
+    .pw-eye {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 17px; color: #9e9e9e;
+      padding: 0;
+    }
+
+    .btn-auth {
+      width: 100%; padding: 14px; background: #0a0a0a; color: #fff;
+      border: none; border-radius: 50px; font-size: 15px; font-weight: 700;
+      font-family: 'Inter',sans-serif; cursor: pointer; transition: background .2s; margin-top: 4px;
+    }
+    .btn-auth:hover { background: var(--accent); }
+
+    .f-hint { font-size: 13px; color: #9e9e9e; text-align: center; margin-top: 14px; }
+    .f-hint a { color: #0a0a0a; font-weight: 600; text-decoration: underline; }
+    .f-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: #ccc; font-size: 12px; }
+    .f-divider::before, .f-divider::after { content:''; flex:1; height:1px; background:#f0f0f0; }
+
+    /* ── OTP SCREEN ── */
+    .otp-screen { display: none; padding: 32px 36px; text-align: center; }
+    .otp-screen.active { display: block; }
+    .otp-icon { font-size: 52px; margin-bottom: 14px; }
+    .otp-screen h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .otp-screen p { font-size: 13px; color: #9e9e9e; margin-bottom: 28px; line-height: 1.6; }
+
+    .otp-inputs { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
+    .otp-input {
+      width: 48px; height: 56px; border: 2px solid #e8e8e8; border-radius: 12px;
+      text-align: center; font-size: 22px; font-weight: 700; font-family: 'Inter',sans-serif;
+      outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    .otp-input:focus { border-color: #0a0a0a; box-shadow: 0 0 0 3px rgba(10,10,10,.08); }
+    .otp-input.filled { border-color: #0a0a0a; background: #fafafa; }
+
+    .otp-code-box {
+      background: #f5f5f5; border-radius: 10px; padding: 14px 20px;
+      margin-bottom: 24px; font-size: 13px; color: #616161; line-height: 1.7;
+    }
+    .otp-code-box strong { font-size: 28px; letter-spacing: 10px; color: #0a0a0a; display: block; margin: 4px 0; }
+
+    .otp-timer { font-size: 13px; color: #9e9e9e; margin-bottom: 20px; }
+    .otp-timer span { font-weight: 700; color: var(--accent); }
+    .btn-resend {
+      background: none; border: none; font-family: 'Inter',sans-serif;
+      font-size: 13px; color: #9e9e9e; cursor: pointer; text-decoration: underline;
+    }
+    .btn-resend:not([disabled]):hover { color: var(--accent); }
+    .btn-resend[disabled] { opacity: .5; cursor: not-allowed; }
+    .btn-back {
+      background: none; border: none; font-family: 'Inter',sans-serif;
+      font-size: 13px; color: #9e9e9e; cursor: pointer; display: flex;
+      align-items: center; gap: 5px; margin: 14px auto 0;
+    }
+    .btn-back:hover { color: #0a0a0a; }
+
+    /* ── SUCCESS ── */
+    .success-screen { display: none; padding: 40px 36px; text-align: center; }
+    .success-screen.active { display: block; }
+    .success-screen .s-icon { font-size: 64px; margin-bottom: 16px; }
+    .success-screen h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .success-screen p { font-size: 14px; color: #9e9e9e; margin-bottom: 28px; }
+
+    /* ── STRENGTH BAR ── */
+    .strength-wrap { margin-top: 6px; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
+    .strength-bar { height: 100%; border-radius: 2px; width: 0; transition: width .3s, background .3s; }
+    .strength-label { font-size: 11px; color: #9e9e9e; margin-top: 4px; }
+
+    @media (max-width: 500px) {
+      .auth-panel, .otp-screen, .success-screen { padding: 24px 20px; }
+      .otp-input { width: 40px; height: 48px; font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- MINI NAVBAR -->
+<nav class="navbar" style="position:static">
+  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <div style="font-size:13px;color:#9e9e9e">Đăng nhập / Đăng ký</div>
+  <a href="baitap.html" style="font-size:13px;font-weight:600;color:#0a0a0a;display:flex;align-items:center;gap:6px">
+    ← Về trang chủ
+  </a>
+</nav>
+
+<!-- AUTH -->
+<div class="auth-page">
+  <div class="auth-box">
+
+    <!-- HEADER -->
+    <div class="auth-header">
+      <div class="logo">Mr.<span>Beast Gohan</span></div>
+      <p>Cửa hàng mô hình anime chính hãng</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs" id="auth-tabs">
+      <div class="auth-tab active" onclick="switchTab('login')">Đăng nhập</div>
+      <div class="auth-tab" onclick="switchTab('register')">Đăng ký</div>
+    </div>
+
+    <!-- ── LOGIN PANEL ── -->
+    <div class="auth-panel active" id="panel-login">
+      <form onsubmit="submitLogin(event)">
+        <div class="f-group" id="lg-email-g">
+          <label>Email</label>
+          <input type="email" id="lg-email" placeholder="email@example.com" autocomplete="email">
+          <div class="f-err">Vui lòng nhập email hợp lệ.</div>
+        </div>
+        <div class="f-group" id="lg-pw-g">
+          <label>Mật khẩu</label>
+          <div class="pw-wrap">
+            <input type="password" id="lg-pw" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="pw-eye" onclick="togglePw('lg-pw',this)">👁</button>
+          </div>
+          <div class="f-err">Mật khẩu phải có ít nhất 6 ký tự.</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+          <a href="#" style="font-size:13px;color:#9e9e9e;text-decoration:underline">Quên mật khẩu?</a>
+        </div>
+        <button type="submit" class="btn-auth">Đăng nhập →</button>
+      </form>
+      <div class="f-divider">hoặc</div>
+      <button onclick="googleLogin()" style="width:100%;padding:13px;border:1.5px solid #e8e8e8;border-radius:50px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s" onmouseover="this.style.borderColor='#0a0a0a'" onmouseout="this.style.borderColor='#e8e8e8'">
+        <span style="font-size:18px">🌐</span> Tiếp tục với Google
+      </button>
+      <p class="f-hint" style="margin-top:20px">Chưa có tài khoản? <a href="#" onclick="switchTab('register');return false">Đăng ký ngay</a></p>
+    </div>
+
+    <!-- ── REGISTER PANEL ── -->
+    <div class="auth-panel" id="panel-register">
+      <form onsubmit="submitRegister(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="f-group" id="rg-fn-g">
+            <label>Họ</label>
+            <input type="text" id="rg-fn" placeholder="Nguyễn">
+            <div class="f-err">Bắt buộc.</div>
+          </div>
+          <div class="f-group" id="rg-ln-g">
+            <label>Tên</label>
+            <input type="text" id="rg-ln" placeholder="Văn A">
+            <div class="f-err">Bắt buộc.</div>
+          </div>
+        </div>
+        <div class="f-group" id="rg-email-g">
+          <label>Email</label>
+          <input type="email" id="rg-email" placeholder="email@example.com">
+          <div class="f-err">Email không hợp lệ.</div>
+        </div>
+        <div class="f-group" id="rg-pw-g">
+          <label>Mật khẩu</label>
+          <div class="pw-wrap">
+            <input type="password" id="rg-pw" placeholder="Tối thiểu 6 ký tự" oninput="checkStrength(this.value)">
+            <button type="button" class="pw-eye" onclick="togglePw('rg-pw',this)">👁</button>
+          </div>
+          <div class="strength-wrap"><div class="strength-bar" id="s-bar"></div></div>
+          <div class="strength-label" id="s-label"></div>
+          <div class="f-err">Mật khẩu phải có ít nhất 6 ký tự.</div>
+        </div>
+        <div class="f-group" id="rg-cf-g">
+          <label>Xác nhận mật khẩu</label>
+          <div class="pw-wrap">
+            <input type="password" id="rg-cf" placeholder="Nhập lại mật khẩu">
+            <button type="button" class="pw-eye" onclick="togglePw('rg-cf',this)">👁</button>
+          </div>
+          <div class="f-err">Mật khẩu không khớp.</div>
+        </div>
+        <button type="submit" class="btn-auth">Tiếp theo →</button>
+      </form>
+      <p class="f-hint" style="margin-top:20px">Đã có tài khoản? <a href="#" onclick="switchTab('login');return false">Đăng nhập</a></p>
+    </div>
+
+    <!-- ── OTP SCREEN ── -->
+    <div class="otp-screen" id="otp-screen">
+      <div class="otp-icon">📱</div>
+      <h3>Xác minh email</h3>
+      <p id="otp-desc">Mã xác minh đã được gửi đến email của bạn.<br/>Vui lòng nhập mã bên dưới.</p>
+
+      <!-- Demo code box -->
+      <div class="otp-code-box">
+        <span style="font-size:12px">📋 Mã xác minh (demo)</span>
+        <strong id="demo-code">——</strong>
+        <span style="font-size:11px">Mã có hiệu lực trong 5 phút</span>
+      </div>
+
+      <div class="otp-inputs" id="otp-inputs">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+        <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      </div>
+
+      <div class="otp-timer">Mã hết hạn sau: <span id="otp-timer">4:59</span></div>
+
+      <button class="btn-auth" id="btn-verify" onclick="verifyOtp()" style="max-width:260px;margin:0 auto 10px;display:block">Xác nhận</button>
+      <button class="btn-resend" id="btn-resend" disabled onclick="resendOtp()">Gửi lại mã</button>
+      <button class="btn-back" onclick="backFromOtp()">← Quay lại</button>
+    </div>
+
+    <!-- ── SUCCESS SCREEN ── -->
+    <div class="success-screen" id="success-screen">
+      <div class="s-icon">🎉</div>
+      <h3 id="success-title">Đăng nhập thành công!</h3>
+      <p id="success-desc">Chào mừng bạn quay lại Mr.Beast Gohan. Đang chuyển hướng...</p>
+      <a href="baitap.html" class="btn-auth" style="display:inline-block;text-decoration:none;text-align:center;max-width:220px">
+        Về trang chủ →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER minimal -->
+<div style="text-align:center;padding:20px;font-size:12px;color:#9e9e9e">
+  © 2026 Mr.Beast Gohan &nbsp;·&nbsp; <a href="#" style="color:#9e9e9e;text-decoration:underline">Chính sách bảo mật</a>
+</div>
+
+<script>
+// ── HELPERS ──────────────────────────────────────────
+var currentMode = 'login'; // 'login' | 'register'
+var generatedOtp = '';
+var timerInterval;
+
+function switchTab(tab) {
+  currentMode = tab;
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'login' ? i === 0 : i === 1));
+  });
+  document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+  document.getElementById('panel-register').classList.toggle('active', tab === 'register');
+  document.getElementById('otp-screen').classList.remove('active');
+  document.getElementById('success-screen').classList.remove('active');
+  document.getElementById('auth-tabs').style.display = 'flex';
+}
+
+function togglePw(id, btn) {
+  var inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function showErr(groupId, show) {
+  var g = document.getElementById(groupId);
+  g.classList.toggle('show-err', show);
+}
+
+function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+// ── PASSWORD STRENGTH ──────────────────────────────
+function checkStrength(pw) {
+  var score = 0;
+  if (pw.length >= 6) score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  var bar = document.getElementById('s-bar');
+  var lbl = document.getElementById('s-label');
+  var levels = [
+    { w:'0%', c:'#e8e8e8', t:'' },
+    { w:'20%', c:'var(--accent)', t:'Rất yếu' },
+    { w:'40%', c:'#f59e0b', t:'Yếu' },
+    { w:'60%', c:'#3b82f6', t:'Trung bình' },
+    { w:'80%', c:'#22c55e', t:'Mạnh' },
+    { w:'100%', c:'#15803d', t:'Rất mạnh' },
+  ];
+  var lvl = levels[Math.min(score, 5)];
+  bar.style.width = lvl.w; bar.style.background = lvl.c;
+  lbl.textContent = lvl.t; lbl.style.color = lvl.c;
+}
+
+// ── LOGIN SUBMIT ──────────────────────────────────
+function submitLogin(e) {
+  e.preventDefault();
+  var email = document.getElementById('lg-email').value.trim();
+  var pw    = document.getElementById('lg-pw').value;
+  var ok = true;
+  if (!isEmail(email)) { showErr('lg-email-g', true); ok = false; } else showErr('lg-email-g', false);
+  if (pw.length < 6)   { showErr('lg-pw-g', true);    ok = false; } else showErr('lg-pw-g', false);
+  if (!ok) return;
+  showOtp(email, 'login');
+}
+
+// ── REGISTER SUBMIT ──────────────────────────────
+function submitRegister(e) {
+  e.preventDefault();
+  var fn    = document.getElementById('rg-fn').value.trim();
+  var ln    = document.getElementById('rg-ln').value.trim();
+  var email = document.getElementById('rg-email').value.trim();
+  var pw    = document.getElementById('rg-pw').value;
+  var cf    = document.getElementById('rg-cf').value;
+  var ok = true;
+  if (!fn)           { showErr('rg-fn-g', true);    ok = false; } else showErr('rg-fn-g', false);
+  if (!ln)           { showErr('rg-ln-g', true);    ok = false; } else showErr('rg-ln-g', false);
+  if (!isEmail(email)){ showErr('rg-email-g', true); ok = false; } else showErr('rg-email-g', false);
+  if (pw.length < 6) { showErr('rg-pw-g', true);    ok = false; } else showErr('rg-pw-g', false);
+  if (pw !== cf)     { showErr('rg-cf-g', true);     ok = false; } else showErr('rg-cf-g', false);
+  if (!ok) return;
+  showOtp(email, 'register');
+}
+
+// ── SHOW OTP ──────────────────────────────────────
+function showOtp(email, mode) {
+  // Generate random 6-digit OTP
+  generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+  document.getElementById('demo-code').textContent = generatedOtp;
+  document.getElementById('otp-desc').innerHTML =
+    'Mã xác minh đã được gửi đến <strong>' + email + '</strong><br/>Vui lòng nhập mã bên dưới.';
+
+  // Hide tabs & panels, show OTP
+  document.getElementById('auth-tabs').style.display = 'none';
+  document.getElementById('panel-login').classList.remove('active');
+  document.getElementById('panel-register').classList.remove('active');
+  document.getElementById('otp-screen').classList.add('active');
+
+  // Reset inputs
+  document.querySelectorAll('.otp-input').forEach(function(inp) {
+    inp.value = ''; inp.classList.remove('filled');
+  });
+  document.querySelectorAll('.otp-input')[0].focus();
+
+  startTimer(300); // 5 minutes
+}
+
+// ── OTP INPUT LOGIC ──────────────────────────────
+document.querySelectorAll('.otp-input').forEach(function(inp, i, arr) {
+  inp.addEventListener('input', function() {
+    var v = inp.value.replace(/\D/g, '');
+    inp.value = v.slice(-1);
+    inp.classList.toggle('filled', inp.value !== '');
+    if (inp.value && i < arr.length - 1) arr[i + 1].focus();
+    // Auto-verify when all filled
+    var all = Array.from(arr).map(function(x) { return x.value; }).join('');
+    if (all.length === 6) {
+      setTimeout(verifyOtp, 300);
+    }
+  });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && !inp.value && i > 0) arr[i - 1].focus();
+  });
+  inp.addEventListener('paste', function(e) {
+    e.preventDefault();
+    var paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+    arr.forEach(function(box, j) {
+      box.value = paste[j] || '';
+      box.classList.toggle('filled', !!box.value);
+    });
+    if (paste.length === 6) setTimeout(verifyOtp, 300);
+  });
+});
+
+// ── VERIFY OTP ───────────────────────────────────
+function verifyOtp() {
+  var entered = Array.from(document.querySelectorAll('.otp-input')).map(function(x){ return x.value; }).join('');
+  if (entered.length < 6) {
+    alert('Vui lòng nhập đủ 6 số!'); return;
+  }
+  if (entered === generatedOtp) {
+    clearInterval(timerInterval);
+    document.getElementById('otp-screen').classList.remove('active');
+    var s = document.getElementById('success-screen');
+    s.classList.add('active');
+    if (currentMode === 'register') {
+      document.getElementById('success-title').textContent = 'Đăng ký thành công! 🎉';
+      document.getElementById('success-desc').textContent = 'Tài khoản của bạn đã được tạo. Chào mừng đến Mr.Beast Gohan!';
+    } else {
+      document.getElementById('success-title').textContent = 'Đăng nhập thành công!';
+      document.getElementById('success-desc').textContent = 'Chào mừng trở lại! Đang chuyển hướng về trang chủ...';
+    }
+    setTimeout(function() { window.location.href = 'baitap.html'; }, 2500);
+  } else {
+    document.querySelectorAll('.otp-input').forEach(function(inp) {
+      inp.style.borderColor = 'var(--accent)';
+      inp.style.animation = 'shake .3s ease';
+      setTimeout(function() { inp.style.borderColor = ''; inp.style.animation = ''; }, 600);
+    });
+    alert('Mã xác minh không đúng. Vui lòng thử lại!');
+  }
+}
+
+// ── TIMER ────────────────────────────────────────
+function startTimer(seconds) {
+  clearInterval(timerInterval);
+  document.getElementById('btn-resend').disabled = true;
+  var remaining = seconds;
+  function tick() {
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    document.getElementById('otp-timer').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('otp-timer').textContent = 'Đã hết hạn';
+      document.getElementById('btn-resend').disabled = false;
+    }
+    remaining--;
+  }
+  tick();
+  timerInterval = setInterval(tick, 1000);
+}
+
+function resendOtp() {
+  generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+  document.getElementById('demo-code').textContent = generatedOtp;
+  document.querySelectorAll('.otp-input').forEach(function(inp) {
+    inp.value = ''; inp.classList.remove('filled');
+  });
+  document.querySelectorAll('.otp-input')[0].focus();
+  startTimer(300);
+}
+
+function backFromOtp() {
+  clearInterval(timerInterval);
+  document.getElementById('otp-screen').classList.remove('active');
+  document.getElementById('auth-tabs').style.display = 'flex';
+  if (currentMode === 'login') {
+    document.getElementById('panel-login').classList.add('active');
+  } else {
+    document.getElementById('panel-register').classList.add('active');
+  }
+}
+
+function googleLogin() {
+  alert('Tính năng đăng nhập Google chưa được cấu hình trong môi trường demo.');
+}
+</script>
+</body>
+</html>

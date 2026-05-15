@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr.Beast Gohan – Mô hình chính hãng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ════ NAVBAR ════ -->
+<nav class="navbar">
+  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <div class="nav-links">
+    <a href="baitap.html" class="active">Trang chủ</a>
+    <a href="gioithieu.html">Giới thiệu</a>
+    <div class="nav-dropdown">
+      <a class="dropdown-toggle">Sản phẩm <span class="dropdown-arrow">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="#figure">
+          <span class="dm-icon f">🎭</span>
+          <span class="dm-text"><strong>Figure</strong><small>Mô hình chính hãng</small></span>
+        </a>
+        <a href="#tcg">
+          <span class="dm-icon t">🃏</span>
+          <span class="dm-text"><strong>Trading Card Game</strong><small>Card bài anime</small></span>
+        </a>
+        <a href="#beast-gohan">
+          <span class="dm-icon b">🐉</span>
+          <span class="dm-text"><strong>Beast Gohan</strong><small>Hàng đặc biệt</small></span>
+        </a>
+      </div>
+    </div>
+    <a href="lienhe.html">Liên hệ</a>
+    <a href="labthuchanh.html">Lab Thực Hành</a>
+  </div>
+  <div class="nav-actions">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <a href="dangnhap.html" style="padding:10px 20px;border:1.5px solid #e0e0e0;border-radius:50px;font-size:13px;font-weight:600;color:#0a0a0a;white-space:nowrap">Đăng nhập</a>
+    <a href="giohang.html" class="btn-nav-cart" style="text-decoration:none;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      Giỏ hàng <span class="cart-badge" id="cart-count">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Hàng tá hàng hot🔥</div>
+    <h1 class="hero-title">Mô hình<br/>anime <em>chính hãng</em></h1>
+    <p class="hero-desc">Được tài trợ bởi tập đoàn Capsule và tổ chức Ratatoskr.</p>
+    <div class="hero-actions">
+      <a href="#figure" class="btn-primary" style="display:inline-block">Mua ngay</a>
+      <a href="#figure" class="btn-outline" style="display:inline-block">Xem bộ sưu tập</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-shoe-bg">
+      <div class="hero-shoe-img">
+        <img src="images/mittobit.jpg" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FIGURE ════ -->
+<section class="section" id="figure">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Danh mục</div>
+      <div class="section-title">Figure</div>
+    </div>
+    <a href="#figure" class="section-link">Xem tất cả →</a>
+  </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#f0f4ff;">
+        <span class="product-badge">Pre-Order</span>
+        <img src="images/digitan.webp" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Umamusume</div>
+        <div class="product-name">❤️❤️ Agnes Digital (My wife) ❤️❤️</div>
+        <div class="product-footer">
+          <span class="product-price">5.700.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#f0fff4;">
+        <span class="product-badge new">Mới</span>
+        <img src="images/still.webp" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Umamusume</div>
+        <div class="product-name">Still in Love</div>
+        <div class="product-footer">
+          <span class="product-price">1.570.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#fff7ed;">
+        <img src="images/tohka.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Date A Live</div>
+        <div class="product-name">Yatogami Tohka</div>
+        <div class="product-footer">
+          <span class="product-price">600.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#fdf4ff;">
+        <img src="images/yoshino.png" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Date A Live</div>
+        <div class="product-name">Himekawa Yoshino</div>
+        <div class="product-footer">
+          <span class="product-price">1.400.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#fef2f2;">
+        <img src="images/kirito.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Sword Art Online</div>
+        <div class="product-name">Integrity Knight Kirito</div>
+        <div class="product-footer">
+          <span class="product-price">3.000.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#f0fdf4;">
+        <img src="images/alice.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Sword Art Online</div>
+        <div class="product-name">Alice Synthesis Thirty</div>
+        <div class="product-footer">
+          <span class="product-price">2.200.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#eff6ff;">
+        <img src="images/eugeo =(.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Sword Art Online</div>
+        <div class="product-name">Eugeo Synthesis Thirty-two</div>
+        <div class="product-footer">
+          <span class="product-price">2.700.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#f5f5f5;">
+        <img src="images/lotus.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Accel World</div>
+        <div class="product-name">Black Lotus (Kuroyukihime)</div>
+        <div class="product-footer">
+          <span class="product-price">1.890.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ TRADING CARD GAME ════ -->
+<section class="section" id="tcg" style="background:#f9f9f9;">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Danh mục</div>
+      <div class="section-title">Trading Card Game (Vâng, shop này có bán bài TCG)</div>
+    </div>
+    <a href="#tcg" class="section-link">Xem tất cả →</a>
+  </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#ffe8f5;">
+        <span class="product-badge">Hot</span>
+        <img src="images/yugioh.png" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Yu-Gi-Oh</div>
+        <div class="product-name">The Chronicles Deck - The Fallen & The Virtuous</div>
+        <div class="product-footer">
+          <span class="product-price">379.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#e8f0ff;">
+        <img src="images/pokemon.webp" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Pokemon</div>
+        <div class="product-name">Scarlet & Violet Starter Deck Generations Corydon EX Pardeado</div>
+        <div class="product-footer">
+          <span class="product-price">361.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#fff3e0;">
+        <img src="images/dbs.png" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Dragon Ball Super Card Game</div>
+        <div class="product-name">STARTER DECK～RESURRECTED FUSION～【DBS-SD06】 </div>
+        <div class="product-footer">
+          <span class="product-price">316.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#f0fdf4;">
+        <img src="images/luatnaybentcgaicap.jpg" alt="">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Yu-Gi-Oh</div>
+        <div class="product-name">Retro Pack (2024) Collection MINI Box</div>
+        <div class="product-footer">
+          <span class="product-price">1.300.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ BEAST GOHAN ════ -->
+<section class="section" id="beast-gohan">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Đặc biệt</div>
+      <div class="section-title">Beast Gohan (Website mascot)</div>
+    </div>
+    <a href="#beast-gohan" class="section-link">Xem tất cả →</a>
+  </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:linear-gradient(135deg,#fff1ec,#ffe8e0);">
+        <span class="product-badge">Limited</span>
+        <img src="images/gohan4.webp" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Dragon Ball Super</div>
+        <div class="product-name">Son Gohan (Beast) SH Figuarts</div>
+        <div class="product-footer">
+          <span class="product-price">8.500.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:linear-gradient(135deg,#f0f4ff,#e8f0ff);">
+        <span class="product-badge new">Mới</span>
+        <img src="images/gohan1.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Dragon Ball Super</div>
+        <div class="product-name">Son Gohan (Beast) (Vs Omnibus Beast)</div>
+        <div class="product-footer">
+          <span class="product-price">6.200.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#111;">
+        <img src="images/gohan2.jpg" alt="">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Dragon Ball Super</div>
+        <div class="product-name">Son Gohan (Beast) (Vs Omnibus Brave)</div>
+        <div class="product-footer">
+          <span class="product-price">3.000.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img-wrap" style="background:#fff0eb;">
+        <img src="images/gohan3.jpg" alt="" style="height:100%;width:100%;object-fit:cover;">
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Dragon Ball Super</div>
+        <div class="product-name">Son Gohan (Beast) (Special Beam Cannon)</div>
+        <div class="product-footer">
+          <span class="product-price">4.800.000₫</span>
+          <div class="btn-add-cart" onclick="addCart(this)">+ Thêm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FEATURES ════ -->
+<section class="section" style="background:#f9f9f9;">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Cam kết</div>
+      <div class="section-title">Tại sao chọn Mr.Beast Gohan?</div>
+    </div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🚚</div><div class="feature-title">Miễn phí vận chuyển</div><div class="feature-desc">Miễn phí toàn quốc cho đơn từ 500.000₫. Giao trong 2–3 ngày.</div></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><div class="feature-title">Đổi trả 30 ngày</div><div class="feature-desc">Không hài lòng? Đổi trả dễ dàng trong 30 ngày, không phát sinh chi phí.</div></div>
+    <div class="feature-card"><div class="feature-icon">🛡️</div><div class="feature-title">Hàng chính hãng 100%</div><div class="feature-desc">Có chứng nhận từ nhà sản xuất. Hoàn tiền nếu phát hiện hàng giả.</div></div>
+    <div class="feature-card"><div class="feature-icon">💳</div><div class="feature-title">Thanh toán an toàn</div><div class="feature-desc">Hỗ trợ thẻ tín dụng, MoMo, ZaloPay, chuyển khoản và COD.</div></div>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="color:#fff;margin-bottom:12px">Mr.<span>Beast Gohan</span></div>
+      <p class="footer-desc">Cửa hàng mô hình anime số 1 Việt Nam.</p>
+      <div class="footer-social" style="margin-top:20px">
+        <a href="https://www.wattpad.com/user/gogeta0702" target="_blank" class="social-btn">📘</a>
+        <a href="https://www.youtube.com/@ngocsaiyan2441" target="_blank" class="social-btn">▶️</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Sản phẩm</div>
+      <div class="footer-links">
+        <a href="#figure">Figure</a>
+        <a href="#tcg">Trading Card Game</a>
+        <a href="#beast-gohan">Beast Gohan</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Hỗ trợ</div>
+      <div class="footer-links">
+        <a href="#">Theo dõi đơn hàng</a>
+        <a href="#">Đổi trả hàng</a>
+        <a href="lienhe.html">Liên hệ</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Thông tin</div>
+      <div class="footer-links">
+        <a href="gioithieu.html">Về chúng tôi</a>
+        <a href="dangnhap.html">Đăng nhập</a>
+        <a href="dashboard.html">Admin</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Mr.Beast Gohan. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Chính sách bảo mật</a><a href="#">Điều khoản</a></div>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script src="js/dropdown.js"></script>
+<script>
+// Smooth scroll cho anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>

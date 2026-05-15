@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liên hệ – Mr.Beast Gohan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <div class="nav-links">
+    <a href="baitap.html">Trang chủ</a>
+    <a href="gioithieu.html">Giới thiệu</a>
+    <div class="nav-dropdown">
+      <a class="dropdown-toggle">Sản phẩm <span class="dropdown-arrow">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="baitap.html#figure"><span class="dm-icon f">🎭</span><span class="dm-text"><strong>Figure</strong><small>Mô hình chính hãng</small></span></a>
+        <a href="baitap.html#tcg"><span class="dm-icon t">🃏</span><span class="dm-text"><strong>Trading Card Game</strong><small>Card bài anime</small></span></a>
+        <a href="baitap.html#beast-gohan"><span class="dm-icon b">🐉</span><span class="dm-text"><strong>Beast Gohan</strong><small>Hàng đặc biệt</small></span></a>
+      </div>
+    </div>
+    <a href="lienhe.html" class="active">Liên hệ</a>
+    <a href="labthuchanh.html">Lab Thực Hành</a>
+  </div>
+  <div class="nav-actions">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+     <a href="dangnhap.html" style="padding:10px 20px;border:1.5px solid #e0e0e0;border-radius:50px;font-size:13px;font-weight:600;color:#0a0a0a;white-space:nowrap">Đăng nhập</a>
+    <a href="giohang.html" class="btn-nav-cart" style="text-decoration:none;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      Giỏ hàng <span class="cart-badge" id="cart-count">0</span>
+    </a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-tag">Liên hệ</div>
+  <h1>Chúng tôi<br/>luôn <span style="color:var(--accent)">lắng nghe</span></h1>
+</div>
+
+<!-- CONTENT -->
+<div class="contact-wrap">
+
+  <!-- LEFT: Info -->
+  <div>
+    <div class="info-item">
+      <div class="info-icon">📍</div>
+      <div>
+        <h4>Địa chỉ</h4>
+        <p>180 Cao Lỗ, Phường 4, Quận 8<br/>TP. Hồ Chí Minh</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">📞</div>
+      <div>
+        <h4>Điện thoại</h4>
+        <a href="tel:0946185418">0946185418</a>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">📧</div>
+      <div>
+        <h4>Email</h4>
+        <a href="mailto:svgohan@gmail.com.vn">svgohan@gmail.com.vn</a>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">🕐</div>
+      <div>
+        <h4>Giờ làm việc</h4>
+        <p>Thứ 2 – Thứ 7: 9:00 – 21:00<br/>Chủ nhật: 10:00 – 18:00</p>
+      </div>
+    </div>
+    <div class="social-row">
+      <a href="https://www.wattpad.com/user/gogeta0702" target="_blank" class="soc-btn">📘</a>
+      <a href="https://www.youtube.com/@ngocsaiyan2441" target="_blank" class="soc-btn">▶️</a>
+    </div>
+  </div>
+
+  <!-- RIGHT: Form -->
+  <div class="contact-form">
+    <h2>Gửi tin nhắn cho chúng tôi</h2>
+    <form id="contact-form" onsubmit="sendMsg(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Họ và tên *</label>
+          <input type="text" placeholder="Nguyễn Văn A" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" placeholder="email@example.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Chủ đề</label>
+        <select>
+          <option>Hỏi về sản phẩm</option>
+          <option>Đơn hàng / Giao hàng</option>
+          <option>Đổi trả / Bảo hành</option>
+          <option>Hợp tác / Đại lý</option>
+          <option>Khác</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tin nhắn *</label>
+        <textarea rows="5" placeholder="Nhập nội dung cần hỗ trợ..." required></textarea>
+      </div>
+      <button type="submit" class="btn-send">Gửi tin nhắn →</button>
+    </form>
+    <div class="success-msg" id="success-msg">✅ Cảm ơn bạn! Chúng tôi sẽ phản hồi trong vòng 24 giờ.</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="color:#fff;margin-bottom:12px">Mr.<span>Beast Gohan</span></div>
+      <p class="footer-desc">Cửa hàng mô hình anime số 1 Việt Nam.</p>
+      <div class="footer-social" style="margin-top:20px">
+        <a href="https://www.wattpad.com/user/gogeta0702" target="_blank" class="social-btn">📘</a>
+        <a href="https://www.youtube.com/@ngocsaiyan2441" target="_blank" class="social-btn">▶️</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Sản phẩm</div>
+      <div class="footer-links">
+        <a href="#figure">Figure</a>
+        <a href="#tcg">Trading Card Game</a>
+        <a href="#beast-gohan">Beast Gohan</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Hỗ trợ</div>
+      <div class="footer-links">
+        <a href="#">Theo dõi đơn hàng</a>
+        <a href="#">Đổi trả hàng</a>
+        <a href="lienhe.html">Liên hệ</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Thông tin</div>
+      <div class="footer-links">
+        <a href="gioithieu.html">Về chúng tôi</a>
+        <a href="dangnhap.html">Đăng nhập</a>
+        <a href="dashboard.html">Admin</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Mr.Beast Gohan. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Chính sách bảo mật</a><a href="#">Điều khoản</a></div>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script src="js/dropdown.js"></script>
+<script>
+function sendMsg(e) {
+  e.preventDefault();
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+}
+</script>
+</body>
+</html>

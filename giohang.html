@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giỏ hàng – Mr.Beast Gohan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── DROPDOWN (copy từ các trang khác) ── */
+    .nav-dropdown { position: relative; }
+    .dropdown-toggle { cursor: pointer; display: flex !important; align-items: center; gap: 4px; user-select: none; }
+    .dropdown-arrow { transition: transform .2s; }
+    .nav-dropdown.open .dropdown-arrow { transform: rotate(180deg); }
+    .dropdown-menu {
+      display: none; position: absolute; top: calc(100% + 12px); left: 50%;
+      transform: translateX(-50%); background: #fff; border-radius: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.14); padding: 8px;
+      min-width: 220px; z-index: 200; border: 1px solid #f0f0f0;
+    }
+    .nav-dropdown.open .dropdown-menu { display: block; }
+    .dropdown-menu a { display: flex !important; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #0a0a0a !important; }
+    .dropdown-menu a:hover { background: #f5f5f5; }
+    .dm-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .dm-icon.f{background:#fff0eb} .dm-icon.t{background:#eef3ff} .dm-icon.b{background:#f0fdf4}
+    .dm-text strong { display: block; font-size: 13px; font-weight: 700; }
+    .dm-text small  { display: block; font-size: 11px; color: #9e9e9e; }
+
+    /* ── CART PAGE ── */
+    :root { --black:#0a0a0a; --accent:#ff3c00; --gray-100:#f5f5f5; --gray-200:#e8e8e8; --gray-400:#9e9e9e; --gray-600:#616161; }
+
+    .cart-page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+    .cart-page h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 8px; }
+    .cart-page .sub { font-size: 14px; color: var(--gray-400); margin-bottom: 36px; }
+
+    .cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
+
+    /* ── ITEMS LIST ── */
+    .cart-items { display: flex; flex-direction: column; gap: 12px; }
+
+    .cart-item {
+      background: #fff; border-radius: 16px; padding: 18px;
+      display: flex; gap: 16px; align-items: center;
+      border: 1px solid var(--gray-200); transition: box-shadow .2s;
+    }
+    .cart-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+
+    .item-img {
+      width: 80px; height: 80px; border-radius: 12px; overflow: hidden;
+      background: var(--gray-100); flex-shrink: 0;
+    }
+    .item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .item-img .img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+
+    .item-info { flex: 1; min-width: 0; }
+    .item-brand { font-size: 11px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+    .item-name  { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item-price-unit { font-size: 13px; color: var(--gray-400); }
+
+    .item-qty {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--gray-200); border-radius: 50px; overflow: hidden;
+    }
+    .qty-btn {
+      width: 36px; height: 36px; background: none; border: none;
+      font-size: 18px; cursor: pointer; font-weight: 700; color: var(--black);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .qty-btn:hover { background: var(--gray-100); }
+    .qty-num { width: 36px; text-align: center; font-size: 14px; font-weight: 700; border: none; outline: none; font-family: 'Inter', sans-serif; }
+
+    .item-subtotal { font-size: 16px; font-weight: 800; min-width: 110px; text-align: right; }
+    .btn-remove {
+      background: none; border: none; cursor: pointer; padding: 6px;
+      color: var(--gray-400); border-radius: 8px; font-size: 18px;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .btn-remove:hover { background: #fff0eb; color: var(--accent); }
+
+    /* ── EMPTY STATE ── */
+    .empty-cart { text-align: center; padding: 80px 20px; }
+    .empty-cart .empty-icon { font-size: 72px; margin-bottom: 20px; }
+    .empty-cart h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .empty-cart p  { font-size: 14px; color: var(--gray-400); margin-bottom: 28px; }
+
+    /* ── SUMMARY BOX ── */
+    .cart-summary {
+      background: #fff; border-radius: 16px; padding: 24px;
+      border: 1px solid var(--gray-200); position: sticky; top: 80px;
+    }
+    .cart-summary h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
+
+    .summary-row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; }
+    .summary-row.total {
+      border-top: 2px solid var(--black); margin-top: 10px; padding-top: 14px;
+      font-size: 18px; font-weight: 900;
+    }
+    .summary-row .label { color: var(--gray-600); }
+    .summary-row.total .label { color: var(--black); }
+    .summary-row.total .val { color: var(--accent); }
+
+    .summary-note { font-size: 12px; color: var(--gray-400); margin: 14px 0; text-align: center; line-height: 1.6; }
+
+    .btn-checkout {
+      width: 100%; padding: 15px; background: var(--black); color: #fff;
+      border: none; border-radius: 50px; font-size: 15px; font-weight: 800;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: background .2s;
+      margin-bottom: 10px;
+    }
+    .btn-checkout:hover { background: var(--accent); }
+    .btn-continue {
+      width: 100%; padding: 13px; background: none; color: var(--black);
+      border: 1.5px solid var(--gray-200); border-radius: 50px; font-size: 14px; font-weight: 700;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: border-color .2s;
+    }
+    .btn-continue:hover { border-color: var(--black); }
+
+    .coupon-wrap { margin: 16px 0; }
+    .coupon-row { display: flex; gap: 8px; }
+    .coupon-input {
+      flex: 1; padding: 11px 14px; border: 1.5px solid var(--gray-200);
+      border-radius: 50px; font-size: 13px; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .2s; text-transform: uppercase;
+    }
+    .coupon-input:focus { border-color: var(--black); }
+    .btn-coupon {
+      padding: 11px 18px; background: var(--black); color: #fff; border: none;
+      border-radius: 50px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; white-space: nowrap; transition: background .2s;
+    }
+    .btn-coupon:hover { background: var(--accent); }
+    .coupon-msg { font-size: 12px; margin-top: 6px; padding: 0 4px; display: none; }
+    .coupon-msg.ok  { color: #15803d; }
+    .coupon-msg.err { color: var(--accent); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      background: var(--black); color: #fff; padding: 13px 18px; border-radius: 10px;
+      font-size: 13px; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      display: flex; align-items: center; gap: 8px;
+      transform: translateX(80px); opacity: 0;
+      transition: all .3s ease; pointer-events: none;
+    }
+    .toast.show { transform: translateX(0); opacity: 1; }
+    .toast.ok  { background: #15803d; }
+
+    /* ── PAYMENT ICONS ── */
+    .pay-icons { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+    .pay-icon {
+      padding: 4px 10px; border: 1px solid var(--gray-200); border-radius: 6px;
+      font-size: 12px; font-weight: 700; color: var(--gray-400);
+    }
+
+    /* ── CHECKOUT MODAL ── */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .modal-bg.show { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #fff; border-radius: 20px; padding: 40px 36px;
+      max-width: 420px; width: 90%; text-align: center;
+      transform: scale(.94); transition: transform .3s;
+    }
+    .modal-bg.show .modal { transform: scale(1); }
+    .modal .m-icon { font-size: 56px; margin-bottom: 16px; }
+    .modal h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+    .modal p  { font-size: 14px; color: var(--gray-400); line-height: 1.7; margin-bottom: 24px; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    @media (max-width: 768px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .cart-summary { position: static; }
+      .item-img { width: 64px; height: 64px; }
+      .item-subtotal { font-size: 14px; min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════ NAVBAR ════ -->
+<nav class="navbar">
+  <a href="baitap.html" class="nav-logo">Mr.<span>Beast Gohan</span></a>
+  <div class="nav-links">
+    <a href="baitap.html">Trang chủ</a>
+    <a href="gioithieu.html">Giới thiệu</a>
+    <div class="nav-dropdown">
+      <a class="dropdown-toggle">Sản phẩm <span class="dropdown-arrow">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="baitap.html#figure"><span class="dm-icon f">🎭</span><span class="dm-text"><strong>Figure</strong><small>Mô hình chính hãng</small></span></a>
+        <a href="baitap.html#tcg"><span class="dm-icon t">🃏</span><span class="dm-text"><strong>Trading Card Game</strong><small>Card bài anime</small></span></a>
+        <a href="baitap.html#beast-gohan"><span class="dm-icon b">🐉</span><span class="dm-text"><strong>Beast Gohan</strong><small>Hàng đặc biệt</small></span></a>
+      </div>
+    </div>
+    <a href="lienhe.html">Liên hệ</a>
+  </div>
+  <div class="nav-actions">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <a href="dangnhap.html" style="padding:10px 20px;border:1.5px solid #e0e0e0;border-radius:50px;font-size:13px;font-weight:600;color:#0a0a0a">Đăng nhập</a>
+    <a href="giohang.html" class="btn-nav-cart" style="text-decoration:none;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Giỏ hàng <span class="cart-badge" id="cart-count">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ════ CART PAGE ════ -->
+<div class="cart-page">
+  <h1>Giỏ hàng</h1>
+  <p class="sub" id="cart-subtitle">Đang tải...</p>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-cart" id="empty-state" style="display:none">
+    <div class="empty-icon">🛍</div>
+    <h2>Giỏ hàng trống</h2>
+    <p>Bạn chưa thêm sản phẩm nào. Khám phá cửa hàng ngay!</p>
+    <a href="baitap.html" class="btn-primary" style="display:inline-block">Tiếp tục mua sắm →</a>
+  </div>
+
+  <!-- CART LAYOUT -->
+  <div class="cart-layout" id="cart-layout" style="display:none">
+
+    <!-- LEFT: ITEMS -->
+    <div>
+      <div class="cart-items" id="cart-items-list"></div>
+      <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center">
+        <a href="baitap.html" style="font-size:13px;color:var(--gray-400);display:flex;align-items:center;gap:5px">← Tiếp tục mua sắm</a>
+        <button onclick="confirmClear()" style="font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif">🗑 Xóa tất cả</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: SUMMARY -->
+    <div class="cart-summary">
+      <h2>Tóm tắt đơn hàng</h2>
+
+      <div class="summary-row"><span class="label">Tạm tính</span><span class="val" id="subtotal">0₫</span></div>
+      <div class="summary-row" id="discount-row" style="display:none"><span class="label" style="color:var(--accent)">Giảm giá</span><span class="val" style="color:var(--accent)" id="discount-val">-0₫</span></div>
+      <div class="summary-row"><span class="label">Vận chuyển</span><span class="val" id="shipping-val" style="color:#22c55e">Miễn phí</span></div>
+      <div class="summary-row total"><span class="label">Tổng cộng</span><span class="val" id="total">0₫</span></div>
+
+      <!-- COUPON -->
+      <div class="coupon-wrap">
+        <div class="coupon-row">
+          <input type="text" class="coupon-input" id="coupon-input" placeholder="Nhập mã giảm giá">
+          <button class="btn-coupon" onclick="applyCoupon()">Áp dụng</button>
+        </div>
+        <div class="coupon-msg" id="coupon-msg"></div>
+      </div>
+
+      <p class="summary-note">🚚 Miễn phí vận chuyển cho đơn từ 500.000₫<br/>🔒 Thanh toán an toàn, bảo mật</p>
+
+      <button class="btn-checkout" onclick="checkout()">Đặt hàng ngay →</button>
+      <button class="btn-continue" onclick="window.location='baitap.html'">Tiếp tục mua sắm</button>
+
+      <div class="pay-icons">
+        <span class="pay-icon">COD</span>
+        <span class="pay-icon">MoMo</span>
+        <span class="pay-icon">ZaloPay</span>
+        <span class="pay-icon">Banking</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CHECKOUT SUCCESS MODAL -->
+<div class="modal-bg" id="checkout-modal">
+  <div class="modal">
+    <div class="m-icon">🎉</div>
+    <h3>Đặt hàng thành công!</h3>
+    <p>Cảm ơn bạn đã mua hàng tại Mr.Beast Gohan!<br/>Chúng tôi sẽ liên hệ xác nhận đơn trong vòng 30 phút.</p>
+    <div style="background:#f5f5f5;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px">
+      Mã đơn hàng: <strong id="order-code" style="color:var(--accent)"></strong>
+    </div>
+    <div class="modal-actions">
+      <a href="baitap.html" class="btn-checkout" style="display:block;text-align:center;text-decoration:none">Về trang chủ</a>
+    </div>
+  </div>
+</div>
+
+<!-- CLEAR CONFIRM -->
+<div class="modal-bg" id="clear-modal">
+  <div class="modal">
+    <div class="m-icon">🗑</div>
+    <h3>Xóa tất cả?</h3>
+    <p>Bạn có chắc muốn xóa hết sản phẩm trong giỏ hàng không?</p>
+    <div class="modal-actions">
+      <button class="btn-checkout" onclick="doClear()" style="background:var(--accent)">Xóa hết</button>
+      <button class="btn-continue" onclick="document.getElementById('clear-modal').classList.remove('show')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="js/cart.js"></script>
+<script src="js/dropdown.js"></script>
+<script>
+var COUPONS = { 'GOHAN10': 10, 'BEAST20': 20, 'SALE15': 15 };
+var discountPct = 0;
+
+// ── FORMAT ──────────────────────────────────────
+function fmt(n) {
+  return n.toLocaleString('vi-VN') + '₫';
+}
+
+// ── TOAST ───────────────────────────────────────
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.classList.remove('show'); }, 2600);
+}
+
+// ── RENDER CART ──────────────────────────────────
+function renderCart() {
+  var items = getCart();
+  var subtitle = document.getElementById('cart-subtitle');
+  var emptyEl  = document.getElementById('empty-state');
+  var layoutEl = document.getElementById('cart-layout');
+  var listEl   = document.getElementById('cart-items-list');
+
+  if (!items.length) {
+    subtitle.textContent = 'Giỏ hàng trống';
+    emptyEl.style.display  = 'block';
+    layoutEl.style.display = 'none';
+    return;
+  }
+
+  subtitle.textContent = items.reduce(function (s, i) { return s + i.qty; }, 0) + ' sản phẩm trong giỏ';
+  emptyEl.style.display  = 'none';
+  layoutEl.style.display = 'grid';
+
+  listEl.innerHTML = items.map(function (item) {
+    var sub = item.price * item.qty;
+    return [
+      '<div class="cart-item" data-id="' + item.id + '">',
+        '<div class="item-img">',
+          item.img
+            ? '<img src="' + item.img + '" alt="" onerror="this.parentElement.innerHTML=\'<div class=img-placeholder>🎭</div>\'">'
+            : '<div class="img-placeholder">🎭</div>',
+        '</div>',
+        '<div class="item-info">',
+          '<div class="item-brand">' + (item.brand || 'Mr.Beast Gohan') + '</div>',
+          '<div class="item-name">' + item.name + '</div>',
+          '<div class="item-price-unit">' + fmt(item.price) + ' / cái</div>',
+        '</div>',
+        '<div class="item-qty">',
+          '<button class="qty-btn" onclick="changeQty(\'' + item.id + '\',-1)">−</button>',
+          '<input class="qty-num" type="number" value="' + item.qty + '" min="1" max="99"',
+            ' onchange="setQty(\'' + item.id + '\',this.value)"',
+            ' onfocus="this.select()">',
+          '<button class="qty-btn" onclick="changeQty(\'' + item.id + '\',1)">+</button>',
+        '</div>',
+        '<div class="item-subtotal">' + fmt(sub) + '</div>',
+        '<button class="btn-remove" onclick="removeItem(\'' + item.id + '\')" title="Xóa">✕</button>',
+      '</div>'
+    ].join('');
+  }).join('');
+
+  updateSummary(items);
+}
+
+function updateSummary(items) {
+  if (!items) items = getCart();
+  var sub = items.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
+  var disc = Math.round(sub * discountPct / 100);
+  var shipping = sub > 0 && sub < 500000 ? 30000 : 0;
+  var total = sub - disc + shipping;
+
+  document.getElementById('subtotal').textContent = fmt(sub);
+  document.getElementById('total').textContent = fmt(total);
+
+  var discRow = document.getElementById('discount-row');
+  if (disc > 0) {
+    discRow.style.display = 'flex';
+    document.getElementById('discount-val').textContent = '-' + fmt(disc);
+  } else {
+    discRow.style.display = 'none';
+  }
+
+  var shipEl = document.getElementById('shipping-val');
+  if (shipping > 0) {
+    shipEl.textContent = fmt(shipping);
+    shipEl.style.color = '';
+  } else {
+    shipEl.textContent = sub > 0 ? 'Miễn phí' : '–';
+    shipEl.style.color = '#22c55e';
+  }
+
+  // Update badge
+  var count = items.reduce(function (s, i) { return s + i.qty; }, 0);
+  document.querySelectorAll('#cart-count, .cart-badge').forEach(function (el) {
+    el.textContent = count;
+  });
+}
+
+// ── ACTIONS ──────────────────────────────────────
+function changeQty(id, delta) {
+  var items = getCart();
+  var item = items.find(function (i) { return i.id === id; });
+  if (!item) return;
+  var newQty = item.qty + delta;
+  if (newQty < 1) { removeItem(id); return; }
+  item.qty = newQty;
+  localStorage.setItem('mbg_cart_v2', JSON.stringify(items));
+  renderCart();
+}
+
+function setQty(id, val) {
+  var qty = parseInt(val);
+  if (isNaN(qty) || qty < 1) qty = 1;
+  var items = getCart();
+  var item = items.find(function (i) { return i.id === id; });
+  if (!item) return;
+  item.qty = qty;
+  localStorage.setItem('mbg_cart_v2', JSON.stringify(items));
+  renderCart();
+}
+
+function removeItem(id) {
+  removeFromCart(id);
+  renderCart();
+  showToast('Đã xóa sản phẩm khỏi giỏ hàng.', '');
+}
+
+function confirmClear() {
+  document.getElementById('clear-modal').classList.add('show');
+}
+
+function doClear() {
+  clearCart();
+  document.getElementById('clear-modal').classList.remove('show');
+  renderCart();
+  showToast('Đã xóa toàn bộ giỏ hàng.', '');
+}
+
+// ── COUPON ───────────────────────────────────────
+function applyCoupon() {
+  var code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  var msgEl = document.getElementById('coupon-msg');
+  if (COUPONS[code]) {
+    discountPct = COUPONS[code];
+    msgEl.className = 'coupon-msg ok';
+    msgEl.textContent = '✅ Áp dụng mã "' + code + '" – Giảm ' + discountPct + '%!';
+    msgEl.style.display = 'block';
+    updateSummary();
+    showToast('Mã giảm giá đã được áp dụng!', 'ok');
+  } else {
+    discountPct = 0;
+    msgEl.className = 'coupon-msg err';
+    msgEl.textContent = '❌ Mã không hợp lệ. Thử: GOHAN10, BEAST20, SALE15';
+    msgEl.style.display = 'block';
+    updateSummary();
+  }
+}
+
+// ── CHECKOUT ─────────────────────────────────────
+function checkout() {
+  var items = getCart();
+  if (!items.length) return;
+  var code = 'BGH-' + Date.now().toString().slice(-6);
+  document.getElementById('order-code').textContent = '#' + code;
+  document.getElementById('checkout-modal').classList.add('show');
+  clearCart();
+  setTimeout(function () { renderCart(); }, 300);
+}
+
+// Allow closing modals by clicking background
+document.querySelectorAll('.modal-bg').forEach(function (bg) {
+  bg.addEventListener('click', function (e) {
+    if (e.target === bg) bg.classList.remove('show');
+  });
+});
+
+// ── INIT ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</body>
+</html>

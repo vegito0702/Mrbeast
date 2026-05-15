@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Mr.Beast Gohan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--accent:#ff3c00;--g100:#f5f5f5;--g200:#e8e8e8;--g400:#9e9e9e;--g600:#616161;--sidebar:230px;--r:12px}
+    body{font-family:'Inter',sans-serif;background:var(--g100);color:var(--black)}
+    a{text-decoration:none;color:inherit}
+    button{font-family:'Inter',sans-serif;cursor:pointer}
+
+    /* LAYOUT */
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:var(--sidebar);background:var(--black);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto}
+    .main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+    /* SIDEBAR */
+    .sb-logo{padding:22px 20px;font-size:17px;font-weight:900;color:#fff;letter-spacing:-.5px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sb-logo span{color:var(--accent)}
+    .sb-section{padding:12px 0}
+    .sb-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:8px 20px 4px}
+    .sb-link{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);transition:all .15s;border-left:3px solid transparent;cursor:pointer;user-select:none}
+    .sb-link:hover{background:rgba(255,255,255,.05);color:#fff}
+    .sb-link.active{background:rgba(255,60,0,.15);color:#fff;border-left-color:var(--accent)}
+    .sb-link .ic{font-size:15px;width:18px;flex-shrink:0}
+    .sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px}
+    .sb-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}
+    .sb-footer a{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.4);padding:5px 0;transition:color .2s}
+    .sb-footer a:hover{color:#fff}
+
+    /* TOPBAR */
+    .topbar{background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px;position:sticky;top:0;z-index:50}
+    .topbar-left h1{font-size:17px;font-weight:700}
+    .topbar-left .breadcrumb{font-size:12px;color:var(--g400);margin-top:2px}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .admin-chip{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--g100);border-radius:50px;font-size:13px;font-weight:600}
+    .avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700}
+
+    /* CONTENT */
+    .content{padding:24px;flex:1}
+    .section{display:none}.section.active{display:block}
+
+    /* STAT CARDS */
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+    .stat-card{background:#fff;border-radius:var(--r);padding:20px;display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--g200);transition:box-shadow .2s}
+    .stat-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+    .stat-card.c1{border-bottom-color:var(--accent)}.stat-card.c2{border-bottom-color:#3b82f6}.stat-card.c3{border-bottom-color:#22c55e}.stat-card.c4{border-bottom-color:#f59e0b}
+    .stat-ic{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .stat-card.c1 .stat-ic{background:#fff0eb}.stat-card.c2 .stat-ic{background:#eff6ff}.stat-card.c3 .stat-ic{background:#f0fdf4}.stat-card.c4 .stat-ic{background:#fffbeb}
+    .stat-lbl{font-size:11px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+    .stat-num{font-size:24px;font-weight:900;letter-spacing:-1px}
+    .stat-chg{font-size:12px;margin-top:3px;font-weight:600;color:#22c55e}
+
+    /* CARD */
+    .card{background:#fff;border-radius:var(--r);margin-bottom:16px;overflow:hidden;border:1px solid var(--g200)}
+    .card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--g200)}
+    .card-title{font-size:14px;font-weight:700}
+    .card-actions{display:flex;gap:8px;align-items:center}
+
+    /* BTNS */
+    .btn{padding:7px 16px;border-radius:50px;font-size:12px;font-weight:700;border:none;transition:background .2s}
+    .btn-dark{background:var(--black);color:#fff}.btn-dark:hover{background:var(--accent)}
+    .btn-ghost{background:var(--g100);color:var(--black);border:1px solid var(--g200)}.btn-ghost:hover{background:var(--g200)}
+    .btn-danger{background:#fff0eb;color:var(--accent);border:1px solid rgba(255,60,0,.2)}.btn-danger:hover{background:var(--accent);color:#fff}
+    .btn-green{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}.btn-green:hover{background:#22c55e;color:#fff}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse}
+    th{background:var(--g100);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+    td{padding:13px 14px;border-bottom:1px solid #f5f5f5;font-size:13px;vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fafafa}
+    .prod-cell{display:flex;align-items:center;gap:10px}
+    .thumb{width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--g100);flex-shrink:0}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .pname{font-weight:600;font-size:13px}
+    .pbrand{font-size:11px;color:var(--g400)}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700}
+    .badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+    .b-green{background:#f0fdf4;color:#15803d}.b-orange{background:#fffbeb;color:#92400e}
+    .b-blue{background:#eff6ff;color:#1d4ed8}.b-red{background:#fff0eb;color:var(--accent)}
+    .b-gray{background:var(--g100);color:var(--g600)}
+
+    /* SEARCH */
+    .search-inp{padding:8px 14px;border:1.5px solid var(--g200);border-radius:50px;font-size:13px;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+    .search-inp:focus{border-color:var(--black)}
+
+    /* TWO COL */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+
+    /* PROGRESS */
+    .prog-wrap{margin-bottom:12px}
+    .prog-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+    .prog-top span:first-child{font-weight:600}
+    .prog-track{height:6px;background:var(--g200);border-radius:3px;overflow:hidden}
+    .prog-fill{height:100%;border-radius:3px}
+
+    /* QUICK ROWS */
+    .q-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+    .q-row:last-child{border-bottom:none}
+    .q-row .lbl{color:var(--g600)}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--black);color:#fff;padding:11px 16px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(0,0,0,.2);transform:translateX(60px);opacity:0;transition:all .25s;pointer-events:none}
+    #toast.show{transform:translateX(0);opacity:1}
+    #toast.ok{background:#15803d}
+
+    /* PAGINATION */
+    .pg{display:flex;gap:4px}
+    .pg-btn{width:32px;height:32px;border:1px solid var(--g200);border-radius:6px;background:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+    .pg-btn.active,.pg-btn:hover{background:var(--black);color:#fff;border-color:var(--black)}
+
+    /* MODAL */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+    .modal-bg.show{opacity:1;pointer-events:all}
+    .modal{background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;transform:scale(.96);transition:transform .2s}
+    .modal-bg.show .modal{transform:scale(1)}
+    .modal h3{font-size:17px;font-weight:800;margin-bottom:8px}
+    .modal p{font-size:13px;color:var(--g600);line-height:1.7;margin-bottom:18px}
+    .modal-footer{display:flex;gap:8px;justify-content:flex-end}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1.5px solid var(--g200);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--black)}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    @media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ════ SIDEBAR ════ -->
+<aside class="sidebar">
+  <div class="sb-logo">Mr.<span>Beast Gohan</span></div>
+  <div class="sb-section">
+    <div class="sb-label">Tổng quan</div>
+    <div class="sb-link active" onclick="showSection('dashboard',this)"><span class="ic">📊</span> Dashboard</div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Cửa hàng</div>
+    <div class="sb-link" onclick="showSection('products',this)"><span class="ic">📦</span> Sản phẩm</div>
+    <div class="sb-link" onclick="showSection('orders',this)"><span class="ic">🛍</span> Đơn hàng <span class="sb-badge">5</span></div>
+    <div class="sb-link" onclick="showSection('users',this)"><span class="ic">👥</span> Người dùng</div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Danh mục</div>
+    <div class="sb-link" onclick="filterProducts('figure',this)"><span class="ic">🎭</span> Figure</div>
+    <div class="sb-link" onclick="filterProducts('tcg',this)"><span class="ic">🃏</span> Trading Card</div>
+    <div class="sb-link" onclick="filterProducts('beast',this)"><span class="ic">🐉</span> Beast Gohan</div>
+  </div>
+  <div class="sb-footer">
+    <a href="baitap.html" target="_blank"><span>🌐</span> Xem website</a>
+    <a href="dangnhap.html"><span>🚪</span> Đăng xuất</a>
+  </div>
+</aside>
+
+<!-- ════ MAIN ════ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1 id="page-title">Dashboard</h1>
+      <div class="breadcrumb" id="page-sub">Admin / Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="admin-chip"><div class="avatar">A</div> Admin</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════ DASHBOARD SECTION ════════════ -->
+    <div class="section active" id="sec-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card c1"><div class="stat-ic">🛍</div><div><div class="stat-lbl">Đơn hàng</div><div class="stat-num" id="c-orders">0</div><div class="stat-chg">↑ +12 hôm nay</div></div></div>
+        <div class="stat-card c2"><div class="stat-ic">💰</div><div><div class="stat-lbl">Doanh thu</div><div class="stat-num" id="c-rev">0</div><div class="stat-chg">↑ +18% tháng này</div></div></div>
+        <div class="stat-card c3"><div class="stat-ic">📦</div><div><div class="stat-lbl">Sản phẩm</div><div class="stat-num" id="c-prod">0</div><div class="stat-chg">↑ +3 mới</div></div></div>
+        <div class="stat-card c4"><div class="stat-ic">👥</div><div><div class="stat-lbl">Thành viên</div><div class="stat-num" id="c-users">0</div><div class="stat-chg">↑ +84 tháng này</div></div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">🕐 Đơn hàng gần đây</span><button class="btn btn-dark" onclick="showSection('orders',null)">Xem tất cả</button></div>
+          <table><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
+          <tbody id="orders-mini-body"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📈 Doanh thu theo danh mục</span></div>
+          <div style="padding:18px">
+            <div class="prog-wrap"><div class="prog-top"><span>🎭 Figure</span><span>45% · 58.5M₫</span></div><div class="prog-track"><div class="prog-fill" style="width:45%;background:var(--accent)"></div></div></div>
+            <div class="prog-wrap"><div class="prog-top"><span>🃏 Trading Card</span><span>30% · 39M₫</span></div><div class="prog-track"><div class="prog-fill" style="width:30%;background:#3b82f6"></div></div></div>
+            <div class="prog-wrap"><div class="prog-top"><span>🐉 Beast Gohan</span><span>25% · 32.5M₫</span></div><div class="prog-track"><div class="prog-fill" style="width:25%;background:#22c55e"></div></div></div>
+            <div style="border-top:1px solid #f5f5f5;margin-top:14px;padding-top:14px">
+              <div class="q-row"><span class="lbl">Tổng tháng này</span><span style="font-weight:700;color:var(--accent)">130M₫</span></div>
+              <div class="q-row"><span class="lbl">Tỉ lệ hoàn thành</span><span style="font-weight:700">89%</span></div>
+              <div class="q-row"><span class="lbl">Khách hàng mới</span><span style="font-weight:700">84</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ PRODUCTS SECTION ════════════ -->
+    <div class="section" id="sec-products">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+        <div class="stat-card c1"><div class="stat-ic">📦</div><div><div class="stat-lbl">Tổng SP</div><div class="stat-num">12</div></div></div>
+        <div class="stat-card c3"><div class="stat-ic">✅</div><div><div class="stat-lbl">Còn hàng</div><div class="stat-num">9</div></div></div>
+        <div class="stat-card c4"><div class="stat-ic">⚠️</div><div><div class="stat-lbl">Sắp hết</div><div class="stat-num">2</div></div></div>
+        <div class="stat-card c2"><div class="stat-ic">❌</div><div><div class="stat-lbl">Hết hàng</div><div class="stat-num">1</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title" id="prod-card-title">📦 Tất cả sản phẩm</span>
+          <div class="card-actions">
+            <input type="text" class="search-inp" placeholder="🔍 Tìm..." oninput="searchProducts(this.value)" style="width:180px">
+            <button class="btn btn-dark" onclick="openModal('add-modal')">+ Thêm</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Sản phẩm</th><th>Danh mục</th><th>Giá</th><th>Kho</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="prod-tbody"></tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fafafa;border-top:1px solid #f5f5f5">
+          <span style="font-size:13px;color:var(--g400)"><span id="prod-count">0</span> sản phẩm</span>
+          <div class="pg"><button class="pg-btn active">1</button><button class="pg-btn">2</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ ORDERS SECTION ════════════ -->
+    <div class="section" id="sec-orders">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+        <div class="stat-card c2"><div class="stat-ic">📋</div><div><div class="stat-lbl">Tổng đơn</div><div class="stat-num">1,248</div></div></div>
+        <div class="stat-card c4"><div class="stat-ic">⏳</div><div><div class="stat-lbl">Chờ xử lý</div><div class="stat-num" style="color:#f59e0b">5</div></div></div>
+        <div class="stat-card c3"><div class="stat-ic">🚚</div><div><div class="stat-lbl">Đang giao</div><div class="stat-num">47</div></div></div>
+        <div class="stat-card c1"><div class="stat-ic">✅</div><div><div class="stat-lbl">Hoàn thành</div><div class="stat-num">1,190</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🛍 Danh sách đơn hàng</span>
+          <div class="card-actions">
+            <input type="text" class="search-inp" placeholder="🔍 Tìm mã / khách..." oninput="searchOrders(this.value)" style="width:200px">
+            <select class="search-inp" style="width:auto" onchange="filterOrders(this.value)">
+              <option value="">Tất cả</option>
+              <option value="pending">Chờ xử lý</option>
+              <option value="shipping">Đang giao</option>
+              <option value="completed">Hoàn thành</option>
+              <option value="cancelled">Đã hủy</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Sản phẩm</th><th>Tổng tiền</th><th>Thanh toán</th><th>Trạng thái</th><th>Ngày</th><th>Thao tác</th></tr></thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fafafa;border-top:1px solid #f5f5f5">
+          <span style="font-size:13px;color:var(--g400)">Hiển thị 1–5 / 1,248 đơn</span>
+          <div class="pg"><button class="pg-btn">‹</button><button class="pg-btn active">1</button><button class="pg-btn">2</button><button class="pg-btn">›</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ USERS SECTION ════════════ -->
+    <div class="section" id="sec-users">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+        <div class="stat-card c2"><div class="stat-ic">👥</div><div><div class="stat-lbl">Tổng thành viên</div><div class="stat-num" id="c-u">0</div></div></div>
+        <div class="stat-card c3"><div class="stat-ic">✅</div><div><div class="stat-lbl">Đang hoạt động</div><div class="stat-num">10</div></div></div>
+        <div class="stat-card c4"><div class="stat-ic">⭐</div><div><div class="stat-lbl">VIP</div><div class="stat-num">4</div></div></div>
+        <div class="stat-card c1"><div class="stat-ic">🔒</div><div><div class="stat-lbl">Bị khóa</div><div class="stat-num">1</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👥 Danh sách người dùng</span>
+          <div class="card-actions">
+            <input type="text" class="search-inp" placeholder="🔍 Tìm tên / email..." oninput="searchUsers(this.value)" style="width:200px">
+            <button class="btn btn-dark" onclick="openModal('add-user-modal')">+ Thêm</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Người dùng</th><th>Email</th><th>Vai trò</th><th>Đơn hàng</th><th>Chi tiêu</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- MODAL: Thêm sản phẩm -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal" style="max-width:500px">
+    <h3>➕ Thêm sản phẩm</h3>
+    <div class="form-row-2"><div class="form-group"><label>Tên sản phẩm *</label><input type="text" placeholder="VD: Rem Wedding Ver."></div><div class="form-group"><label>Thương hiệu</label><input type="text" placeholder="VD: Good Smile Co."></div></div>
+    <div class="form-row-2"><div class="form-group"><label>Danh mục *</label><select><option>🎭 Figure</option><option>🃏 Trading Card</option><option>🐉 Beast Gohan</option></select></div><div class="form-group"><label>Giá bán (₫) *</label><input type="number" placeholder="VD: 2500000"></div></div>
+    <div class="form-row-2"><div class="form-group"><label>Số lượng kho</label><input type="number" placeholder="VD: 10"></div><div class="form-group"><label>Trạng thái</label><select><option>Đang bán</option><option>Pre-order</option><option>Hết hàng</option></select></div></div>
+    <div class="form-group"><label>Mô tả</label><textarea rows="2" placeholder="Mô tả sản phẩm..."></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('add-modal')">Hủy</button>
+      <button class="btn btn-dark" onclick="saveProduct()">Lưu sản phẩm</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Thêm người dùng -->
+<div class="modal-bg" id="add-user-modal">
+  <div class="modal">
+    <h3>➕ Thêm người dùng</h3>
+    <div class="form-row-2"><div class="form-group"><label>Họ tên *</label><input type="text" placeholder="Nguyễn Văn A"></div><div class="form-group"><label>Email *</label><input type="email" placeholder="email@example.com"></div></div>
+    <div class="form-row-2"><div class="form-group"><label>Vai trò</label><select><option>Người dùng</option><option>VIP</option><option>Admin</option></select></div><div class="form-group"><label>Mật khẩu</label><input type="password" placeholder="••••••"></div></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('add-user-modal')">Hủy</button>
+      <button class="btn btn-dark" onclick="saveUser()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Xác nhận xóa -->
+<div class="modal-bg" id="del-modal">
+  <div class="modal">
+    <h3>🗑 Xác nhận xóa</h3>
+    <p id="del-msg">Bạn có chắc muốn xóa mục này không?</p>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('del-modal')">Hủy</button>
+      <button class="btn btn-danger" id="del-confirm-btn">Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Cập nhật trạng thái đơn -->
+<div class="modal-bg" id="order-modal">
+  <div class="modal">
+    <h3>✏️ Cập nhật đơn hàng <span id="modal-order-id" style="color:var(--accent)"></span></h3>
+    <div class="form-group"><label>Trạng thái mới</label>
+      <select id="order-status-select">
+        <option value="pending">⏳ Chờ xử lý</option>
+        <option value="shipping">🚚 Đang giao</option>
+        <option value="completed">✅ Hoàn thành</option>
+        <option value="cancelled">❌ Đã hủy</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Ghi chú</label><textarea rows="2" placeholder="Ghi chú nội bộ..."></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('order-modal')">Hủy</button>
+      <button class="btn btn-dark" onclick="updateOrder()">Cập nhật</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ════ DATA ════
+var PRODUCTS = [
+   { name:'❤️❤️ Agnes Digital (My wife) ❤️❤️', brand:'Umamusume', cat:'figure',  price:5700000, stock:8,  img:'images/digitan.webp',  status:'active' },
+  { name:'Still in Love', brand:'Umamusume', cat:'figure',  price:1570000, stock:14, img:'images/still.webp',    status:'active' },
+  { name:'Yatogami Tohka', brand:'Date A Live', cat:'figure', price:600000, stock:3, img:'images/tohka.jpg',     status:'low' },
+  { name:'Himekawa Yoshino', brand:'Date A Live', cat:'figure', price:1400000, stock:10, img:'images/yoshino.png', status:'active' },
+  { name:'Integrity Knight Kirito', brand:'Sword Art Online', cat:'figure', price:3000000, stock:6, img:'images/kirito.jpg', status:'active' },
+  { name:'Alice Synthesis Thirty', brand:'Sword Art Online', cat:'figure', price:2200000, stock:11, img:'images/alice.jpg', status:'active' },
+  { name:'Eugeo Synthesis Thirty-two', brand:'Sword Art Online', cat:'figure', price:2700000, stock:0, img:'images/eugeo =(.jpg', status:'out' },
+  { name:'Black Lotus', brand:'Accel World', cat:'figure',  price:1890000, stock:5, img:'images/lotus.jpg',      status:'active' },
+  { name:'The Chronicles Deck - The Fallen & The Virtuous', brand:'Yu-Gi-Oh', cat:'tcg', price:379000, stock:22, img:'images/yugioh.png', status:'active' },
+  { name:'Scarlet & Violet Starter Deck Generations Corydon EX Pardeado', brand:'Pokemon', cat:'tcg', price:361000, stock:18, img:'images/pokemon.webp', status:'active' },
+  { name:'STARTER DECK～RESURRECTED FUSION～【DBS-SD06】', brand:'Dragon Ball Super Card Game', cat:'tcg',    price:316000, stock:12, img:'images/dbs.png',     status:'active' },
+  { name:'Son Gohan (Beast) SH Figuarts', brand:'Dragon Ball Super', cat:'beast', price:8500000, stock:2, img:'images/gohan4.webp', status:'low' },
+];
+
+var ORDERS = [
+  {id:'BGH-1248',customer:'Nguyễn Minh Khoa', product:'Agnes Digital × 1', total:5700000,pay:'VNPay',   status:'completed',date:'12/05/2026'},
+  {id:'BGH-1247',customer:'Trần Thị Lan Anh', product:'Hatsune Miku × 2',  total:5140000,pay:'COD',     status:'shipping', date:'12/05/2026'},
+  {id:'BGH-1246',customer:'Lê Văn Phúc',      product:'Kirito Knight × 1', total:3000000,pay:'Chuyển khoản',status:'pending',date:'11/05/2026'},
+  {id:'BGH-1245',customer:'Phạm Quỳnh Anh',   product:'Mittobit Sig × 1',  total:8500000,pay:'MoMo',    status:'completed',date:'11/05/2026'},
+  {id:'BGH-1244',customer:'Võ Thanh Bình',     product:'Kurumi SSR × 3',    total:1350000,pay:'COD',     status:'cancelled',date:'10/05/2026'},
+];
+
+var USERS = [
+  {id:1,name:'Nguyễn Minh Khoa',email:'khoa@email.com',role:'vip',  orders:48,spent:58400000,status:'active'},
+  {id:2,name:'Trần Thị Lan Anh',email:'lan@email.com', role:'vip',  orders:31,spent:42600000,status:'active'},
+  {id:3,name:'Lê Văn Phúc',     email:'phuc@email.com',role:'user', orders:12,spent:18750000,status:'active'},
+  {id:4,name:'Phạm Quỳnh Anh',  email:'anh@email.com', role:'vip',  orders:67,spent:124500000,status:'active'},
+  {id:5,name:'Võ Thanh Bình',   email:'binh@email.com',role:'user', orders:3, spent:8900000, status:'inactive'},
+  {id:6,name:'Đỗ Ngọc Hà',     email:'ha@email.com',  role:'user', orders:8, spent:22400000,status:'active'},
+  {id:7,name:'Hoàng Minh Tuấn', email:'tuan@email.com',role:'user', orders:19,spent:31200000,status:'active'},
+  {id:8,name:'Bùi Thị Mai',    email:'mai@email.com', role:'vip',  orders:7, spent:12800000,status:'active'},
+  {id:9,name:'Ngô Văn Dũng',   email:'dung@email.com',role:'user', orders:2, spent:6700000, status:'banned'},
+  {id:10,name:'Vũ Thị Hoa',    email:'hoa@email.com', role:'user', orders:15,spent:28900000,status:'active'},
+  {id:11,name:'Đinh Quốc Khải',email:'khai@email.com',role:'vip',  orders:42,spent:89600000,status:'active'},
+];
+
+var currentFilter = '';
+
+// ════ HELPERS ════
+function fmt(n){return n.toLocaleString('vi-VN')+'₫'}
+function statusBadge(s){
+  var m={active:['b-green','Còn hàng'],low:['b-orange','Sắp hết'],out:['b-red','Hết hàng'],
+         completed:['b-green','Hoàn thành'],shipping:['b-blue','Đang giao'],
+         pending:['b-orange','Chờ xử lý'],cancelled:['b-gray','Đã hủy'],
+         inactive:['b-gray','Không HĐ'],banned:['b-red','Bị khóa']};
+  var x=m[s]||['b-gray',s];
+  return '<span class="badge '+x[0]+'">'+x[1]+'</span>';
+}
+function roleBadge(r){
+  var m={admin:'<span class="badge b-red">👑 Admin</span>',vip:'<span class="badge b-orange">⭐ VIP</span>',user:'<span class="badge b-gray">👤 User</span>'};
+  return m[r]||'';
+}
+
+// ════ SECTION SWITCHING ════
+function showSection(name, linkEl){
+  // Update sections
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+  document.getElementById('sec-'+name).classList.add('active');
+
+  // Update sidebar active
+  if(linkEl){
+    document.querySelectorAll('.sb-link').forEach(function(l){l.classList.remove('active')});
+    linkEl.classList.add('active');
+  }
+
+  // Update topbar
+  var titles={dashboard:'Dashboard',products:'Sản phẩm',orders:'Đơn hàng',users:'Người dùng'};
+  document.getElementById('page-title').textContent=titles[name]||name;
+  document.getElementById('page-sub').textContent='Admin / '+(titles[name]||name);
+
+  // Reset filter when going to products
+  if(name==='products'){currentFilter='';document.getElementById('prod-card-title').textContent='📦 Tất cả sản phẩm';renderProducts(PRODUCTS);}
+  if(name==='orders')  renderOrders(ORDERS);
+  if(name==='users')   renderUsers(USERS);
+}
+
+// ════ PRODUCTS ════
+function filterProducts(cat, linkEl){
+  showSection('products', linkEl);
+  currentFilter=cat;
+  var label={figure:'🎭 Figure',tcg:'🃏 Trading Card Game',beast:'🐉 Beast Gohan'};
+  document.getElementById('prod-card-title').textContent=label[cat]||'Sản phẩm';
+  renderProducts(PRODUCTS.filter(function(p){return p.cat===cat}));
+}
+
+function renderProducts(list){
+  document.getElementById('prod-count').textContent=list.length;
+  if(!list.length){
+    document.getElementById('prod-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--g400)">Không tìm thấy sản phẩm nào.</td></tr>';
+    return;
+  }
+  document.getElementById('prod-tbody').innerHTML=list.map(function(p){
+    var catLabel={figure:'🎭 Figure',tcg:'🃏 TCG',beast:'🐉 Beast'}[p.cat]||p.cat;
+    return '<tr>'+
+      '<td><div class="prod-cell"><div class="thumb"><img src="'+p.img+'" onerror="this.style.display=\'none\'"></div>'+
+      '<div><div class="pname">'+p.name+'</div><div class="pbrand">'+p.brand+'</div></div></div></td>'+
+      '<td>'+catLabel+'</td>'+
+      '<td style="font-weight:700">'+fmt(p.price)+'</td>'+
+      '<td><span style="font-weight:700;color:'+(p.stock===0?'var(--accent)':p.stock<5?'#f59e0b':'#22c55e')+'">'+p.stock+'</span></td>'+
+      '<td>'+statusBadge(p.status)+'</td>'+
+      '<td><div style="display:flex;gap:6px">'+
+        '<button class="btn btn-ghost" onclick="editProduct('+p.id+')">✏️</button>'+
+        '<button class="btn btn-danger" onclick="confirmDelete(\'sản phẩm\',\''+p.name+'\')">🗑</button>'+
+      '</div></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function searchProducts(q){
+  q=q.toLowerCase();
+  var list=currentFilter?PRODUCTS.filter(function(p){return p.cat===currentFilter}):PRODUCTS;
+  renderProducts(list.filter(function(p){return p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q)}));
+}
+
+function editProduct(id){
+  openModal('add-modal');
+  toast('Đang chỉnh sửa sản phẩm #'+id,'');
+}
+
+// ════ ORDERS ════
+function renderOrders(list){
+  document.getElementById('orders-tbody').innerHTML=list.map(function(o){
+    return '<tr>'+
+      '<td><strong style="color:var(--accent)">#'+o.id+'</strong></td>'+
+      '<td>'+o.customer+'</td>'+
+      '<td style="font-size:12px;color:var(--g600)">'+o.product+'</td>'+
+      '<td style="font-weight:700">'+fmt(o.total)+'</td>'+
+      '<td><span class="badge b-gray">'+o.pay+'</span></td>'+
+      '<td>'+statusBadge(o.status)+'</td>'+
+      '<td style="font-size:12px;color:var(--g400)">'+o.date+'</td>'+
+      '<td><div style="display:flex;gap:5px">'+
+        '<button class="btn btn-ghost" onclick="openOrderModal(\''+o.id+'\',\''+o.status+'\')">✏️</button>'+
+        '<button class="btn btn-danger" onclick="confirmDelete(\'đơn hàng\',\'#'+o.id+'\')">🗑</button>'+
+      '</div></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function filterOrders(status){
+  renderOrders(status?ORDERS.filter(function(o){return o.status===status}):ORDERS);
+}
+
+function searchOrders(q){
+  q=q.toLowerCase();
+  renderOrders(ORDERS.filter(function(o){return o.id.toLowerCase().includes(q)||o.customer.toLowerCase().includes(q)}));
+}
+
+function openOrderModal(id, status){
+  document.getElementById('modal-order-id').textContent='#'+id;
+  document.getElementById('order-status-select').value=status;
+  openModal('order-modal');
+}
+
+function updateOrder(){
+  closeModal('order-modal');
+  toast('✅ Cập nhật đơn hàng thành công!','ok');
+}
+
+// ════ USERS ════
+function renderUsers(list){
+  document.getElementById('users-tbody').innerHTML=list.map(function(u){
+    return '<tr>'+
+      '<td><div class="prod-cell">'+
+        '<div class="avatar" style="width:36px;height:36px;font-size:14px;flex-shrink:0">'+u.name[0]+'</div>'+
+        '<div><div class="pname">'+u.name+'</div></div></div></td>'+
+      '<td style="font-size:12px;color:var(--g600)">'+u.email+'</td>'+
+      '<td>'+roleBadge(u.role)+'</td>'+
+      '<td style="font-weight:700;color:#3b82f6">'+u.orders+'</td>'+
+      '<td style="font-weight:700;color:var(--accent)">'+(u.spent/1000000).toFixed(1)+'M₫</td>'+
+      '<td>'+statusBadge(u.status)+'</td>'+
+      '<td><div style="display:flex;gap:5px">'+
+        '<button class="btn btn-ghost" onclick="toast(\'Chỉnh sửa người dùng...\',\'\')">✏️</button>'+
+        (u.status==='banned'
+          ?'<button class="btn btn-green" onclick="toast(\'Đã mở khóa tài khoản!\',\'ok\')">🔓</button>'
+          :'<button class="btn btn-danger" onclick="confirmDelete(\'người dùng\',\''+u.name+'\')">🔒</button>')+
+      '</div></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function searchUsers(q){
+  q=q.toLowerCase();
+  renderUsers(USERS.filter(function(u){return u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)}));
+}
+
+// ════ MODALS ════
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+function confirmDelete(type, name){
+  document.getElementById('del-msg').textContent='Bạn có chắc muốn xóa '+type+' "'+name+'"? Hành động này không thể hoàn tác.';
+  document.getElementById('del-confirm-btn').onclick=function(){closeModal('del-modal');toast('🗑 Đã xóa '+name,'');};
+  openModal('del-modal');
+}
+
+document.querySelectorAll('.modal-bg').forEach(function(bg){
+  bg.addEventListener('click',function(e){if(e.target===bg)bg.classList.remove('show')});
+});
+
+// ════ FORM ACTIONS ════
+function saveProduct(){closeModal('add-modal');toast('✅ Đã lưu sản phẩm!','ok')}
+function saveUser(){closeModal('add-user-modal');toast('✅ Đã thêm người dùng!','ok')}
+
+// ════ TOAST ════
+var _tt;
+function toast(msg, type){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.className='show'+(type?' '+type:'');
+  clearTimeout(_tt);
+  _tt=setTimeout(function(){el.className=''},2400);
+}
+
+// ════ COUNTER ANIMATION ════
+function animCount(id,target,suffix){
+  var el=document.getElementById(id);if(!el)return;
+  var n=0,step=Math.ceil(target/50),t=setInterval(function(){
+    n=Math.min(n+step,target);
+    el.textContent=n.toLocaleString('vi-VN')+(suffix||'');
+    if(n>=target)clearInterval(t);
+  },25);
+}
+
+// ════ ORDERS MINI (dashboard) ════
+function renderOrdersMini(){
+  document.getElementById('orders-mini-body').innerHTML=ORDERS.slice(0,5).map(function(o){
+    return '<tr><td><strong style="color:var(--accent);font-size:12px">#'+o.id+'</strong></td>'+
+      '<td>'+o.customer+'</td>'+
+      '<td style="font-weight:700">'+fmt(o.total)+'</td>'+
+      '<td>'+statusBadge(o.status)+'</td></tr>';
+  }).join('');
+}
+
+// ════ INIT ════
+window.addEventListener('load',function(){
+  animCount('c-orders',1248);
+  animCount('c-rev',130,'M₫');
+  animCount('c-prod',12);
+  animCount('c-users',5240);
+  animCount('c-u',USERS.length);
+  renderProducts(PRODUCTS);
+  renderOrders(ORDERS);
+  renderUsers(USERS);
+  renderOrdersMini();
+});
+</script>
+</body>
+</html>
